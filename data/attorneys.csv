@@ -1,0 +1,6 @@
+attorney_id,first_name,last_name,email,department,bar_admission_date
+1,Alice,Smith,alice@lawfirm.com,Corporate,2012-06-15
+2,Bob,Johnson,bob@lawfirm.com,Litigation,2015-09-01
+3,Carla,Ramos,carla@lawfirm.com,IP,invalid_email
+4,David,Nguyen,david@lawfirm.com,Pro Bono,2010-01-10
+5,Elena,Kaur,elena@lawfirm.com,Corporate,not_a_date

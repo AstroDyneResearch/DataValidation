@@ -1,0 +1,5 @@
+Check,Result
+Nulls in clients.csv,0
+Nulls in matters.csv,0
+Duplicate client_id in clients.csv,0
+Invalid client_id references in matters.csv,0

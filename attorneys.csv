@@ -1,0 +1,101 @@
+attorney_id,first_name,last_name,email,department,bar_admission_date
+1,Kathy,Cantu,kathy.cantu@lawfirm.com,Litigation,2017-12-04
+2,Alyssa,Turner,alyssa.turner@lawfirm.com,Corporate,2021-04-29
+3,Jennifer,Deleon,jennifer.deleon@lawfirm.com,Pro Bono,2011-08-18
+4,Jeremy,Payne,jeremy.payne@lawfirm.com,Corporate,2012-01-30
+5,Jeremy,Cruz,jeremy.cruz@lawfirm.com,Corporate,2020-04-08
+6,Bobby,Anderson,bobby.anderson@lawfirm.com,Corporate,2019-08-23
+7,Kevin,Guerrero,,IP,2010-11-07
+8,Lindsay,Cooper,lindsay.cooper@lawfirm.com,Litigation,2012-03-21
+9,Victoria,Nguyen,victoria.nguyen@lawfirm.com,Corporate,2022-08-07
+10,Keith,Walker,keith.walker@lawfirm.com,IP,2013-02-11
+11,Jessica,Myers,jessica.myers@lawfirm.com,Litigation,2018-11-28
+12,Alicia,Hendrix,alicia.hendrix@lawfirm.com,Pro Bono,2022-06-10
+13,Christine,Ayers,christine.ayers@lawfirm.com,Pro Bono,2013-10-20
+14,Lisa,Collins,lisa.collins@lawfirm.com,Litigation,2021-06-30
+15,Nancy,Reed,nancy.reed@lawfirm.com,Corporate,2012-06-26
+16,Natalie,Martin,natalie.martin@lawfirm.com,Corporate,2020-02-24
+17,Shawn,Newton,shawn.newton@lawfirm.com,IP,2017-04-14
+18,Robin,Underwood,robin.underwood@lawfirm.com,IP,2013-08-14
+19,Aaron,Mendoza,aaron.mendoza@lawfirm.com,Litigation,2018-03-19
+20,Brian,Dillon,brian.dillon@lawfirm.com,Corporate,2019-06-23
+21,Jenna,Lozano,jenna.lozano@lawfirm.com,Litigation,2021-08-06
+22,Brett,Wu,brett.wu@lawfirm.com,Pro Bono,not_a_date
+23,Robert,White,robert.white@lawfirm.com,Litigation,2019-07-16
+24,Laura,Rodriguez,laura.rodriguez@lawfirm.com,Litigation,2021-03-19
+25,Christine,Dunlap,christine.dunlap@lawfirm.com,Pro Bono,2010-08-12
+26,David,Rodriguez,david.rodriguez@lawfirm.com,Corporate,2021-04-24
+27,Jacqueline,Thornton,jacqueline.thornton@lawfirm.com,Litigation,2017-02-05
+28,Jonathan,Yang,jonathan.yang@lawfirm.com,Pro Bono,2011-11-02
+29,Colleen,Thomas,colleen.thomas@lawfirm.com,Litigation,2023-07-31
+30,Regina,Miller,regina.miller@lawfirm.com,Corporate,2013-07-24
+31,Stephanie,Smith,stephanie.smith@lawfirm.com,Corporate,2014-07-04
+32,Robert,Snow,robert.snow@lawfirm.com,IP,2012-01-15
+33,Jennifer,Middleton,jennifer.middleton@lawfirm.com,Pro Bono,2014-03-05
+34,Colin,Craig,colin.craig@lawfirm.com,Pro Bono,2013-02-03
+35,Steven,Reynolds,steven.reynolds@lawfirm.com,Litigation,2017-03-04
+36,John,Ramirez,john.ramirez@lawfirm.com,Litigation,2022-01-08
+37,Paige,Stafford,paige.stafford@lawfirm.com,Pro Bono,2012-05-31
+38,Joshua,Jackson,joshua.jackson@lawfirm.com,IP,2019-07-29
+39,Samantha,Chan,samantha.chan@lawfirm.com,IP,2018-01-31
+40,Angela,Medina,angela.medina@lawfirm.com,Pro Bono,2023-08-17
+41,Donna,Sanders,donna.sanders@lawfirm.com,Pro Bono,2013-08-21
+42,Michael,Beard,michael.beard@lawfirm.com,Corporate,2013-10-07
+43,Victoria,Daugherty,victoria.daugherty@lawfirm.com,Corporate,2022-06-16
+44,Susan,Shaffer,susan.shaffer@lawfirm.com,Pro Bono,2017-05-26
+45,Brandy,Maldonado,brandy.maldonado@lawfirm.com,Corporate,2012-07-09
+46,Gabriel,Hudson,gabriel.hudson@lawfirm.com,Corporate,2023-06-02
+47,Carol,Garza,carol.garza@lawfirm.com,Litigation,2014-01-11
+48,Chelsea,Wood,chelsea.wood@lawfirm.com,IP,2014-10-17
+49,Antonio,Gonzalez,antonio.gonzalez@lawfirm.com,IP,2020-02-17
+50,George,Mcclure,george.mcclure@lawfirm.com,IP,2018-08-22
+51,Gregory,Olsen,gregory.olsen@lawfirm.com,Litigation,2024-04-19
+52,John,Clark,john.clark@lawfirm.com,Corporate,2023-01-14
+53,Heather,White,heather.white@lawfirm.com,Litigation,2018-11-13
+54,Chris,Miller,chris.miller@lawfirm.com,Corporate,2015-01-12
+55,Matthew,Bradley,matthew.bradley@lawfirm.com,Pro Bono,2016-12-05
+56,Mckenzie,Schmidt,mckenzie.schmidt@lawfirm.com,Pro Bono,2019-11-11
+57,Ricky,Calderon,ricky.calderon@lawfirm.com,IP,2018-12-25
+58,Garrett,Alexander,garrett.alexander@lawfirm.com,IP,2012-04-25
+59,Brian,Banks,brian.banks@lawfirm.com,Litigation,2015-04-22
+60,Justin,Ellis,justin.ellis@lawfirm.com,Corporate,2024-03-23
+61,Edwin,Frank,edwin.frank@lawfirm.com,Pro Bono,2024-01-13
+62,Michelle,Roach,michelle.roach@lawfirm.com,Pro Bono,2020-08-31
+63,Shaun,Lewis,shaun.lewis@lawfirm.com,Litigation,2012-11-27
+64,Angela,Sosa,angela.sosa@lawfirm.com,Litigation,2017-12-15
+65,Stephanie,Ramirez,,Litigation,2016-05-15
+66,Stephen,Cooper,stephen.cooper@lawfirm.com,Corporate,2014-09-10
+67,Megan,Fuller,megan.fuller@lawfirm.com,IP,2022-02-20
+68,Alfred,Smith,alfred.smith@lawfirm.com,IP,2012-12-17
+69,Sarah,Lam,sarah.lam@lawfirm.com,Corporate,2014-07-26
+70,Lisa,Powell,lisa.powell@lawfirm.com,Corporate,2012-02-28
+71,Mary,Guzman,mary.guzman@lawfirm.com,Pro Bono,2024-04-26
+72,Antonio,Fitzgerald,antonio.fitzgerald@lawfirm.com,Litigation,2018-03-05
+73,Janet,Flores,janet.flores@lawfirm.com,IP,2017-10-07
+74,Debra,Edwards,debra.edwards@lawfirm.com,Pro Bono,2011-04-23
+75,Austin,Porter,austin.porter@lawfirm.com,Litigation,2013-07-17
+76,Sara,Donovan,sara.donovan@lawfirm.com,Corporate,2014-11-28
+77,Paula,Wong,paula.wong@lawfirm.com,Corporate,2024-05-30
+78,Robert,Ellis,robert.ellis@lawfirm.com,IP,2011-10-15
+79,Crystal,Jones,crystal.jones@lawfirm.com,Pro Bono,2018-02-12
+80,Lisa,Moore,lisa.moore@lawfirm.com,Litigation,2014-08-18
+81,Nicholas,Andrews,nicholas.andrews@lawfirm.com,Pro Bono,2014-05-25
+82,Vanessa,Torres,vanessa.torres@lawfirm.com,Corporate,2016-03-01
+83,Lori,Shaw,lori.shaw@lawfirm.com,IP,2012-06-10
+84,Hailey,Cohen,hailey.cohen@lawfirm.com,Litigation,2011-03-31
+85,Melanie,White,melanie.white@lawfirm.com,Litigation,2018-10-03
+86,Jennifer,Miller,jennifer.miller@lawfirm.com,IP,2018-01-12
+87,Dawn,Butler,dawn.butler@lawfirm.com,Litigation,2013-08-10
+88,Lindsay,Williams,lindsay.williams@lawfirm.com,IP,2014-09-02
+89,Rachel,Mendoza,rachel.mendoza@lawfirm.com,Pro Bono,2018-09-28
+90,Rachel,Hodge,rachel.hodge@lawfirm.com,Corporate,2023-08-31
+91,Jamie,Day,jamie.day@lawfirm.com,Pro Bono,2020-10-07
+92,Melissa,Ramirez,melissa.ramirez@lawfirm.com,Corporate,2016-06-14
+93,Lisa,George,lisa.george@lawfirm.com,IP,2017-05-30
+94,April,Williamson,april.williamson@lawfirm.com,IP,2013-08-08
+95,Carolyn,Wood,carolyn.wood@lawfirm.com,Pro Bono,not_a_date
+96,Brooke,Lucas,brooke.lucas@lawfirm.com,Litigation,2013-12-05
+97,Kevin,Price,kevin.price@lawfirm.com,Litigation,2013-12-21
+98,Ryan,Moore,ryan.moore@lawfirm.com,IP,2011-12-02
+99,Richard,Casey,richard.casey@lawfirm.com,Corporate,2014-08-05
+100,Timothy,Mckee,timothy.mckee@lawfirm.com,IP,2019-11-15

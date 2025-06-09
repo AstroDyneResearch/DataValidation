@@ -1,0 +1,6 @@
+case_id,attorney_id,title,status,start_date,closed_date
+1001,1,Immigration Asylum Case,open,2023-09-15,
+1002,2,Eviction Defense,closed,2022-05-01,2023-03-12
+1003,3,Patent Protection Clinic,open,2024-01-01,
+1004,5,Nonprofit Incorporation,closed,invalid_date,2023-01-15
+1005,999,Community Legal Aid,pending,2023-06-20,

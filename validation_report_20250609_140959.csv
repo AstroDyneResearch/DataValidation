@@ -1,0 +1,8 @@
+Check,Result
+Nulls in attorneys file,2
+Nulls in cases file,72
+Nulls in time_entries file,0
+Duplicate attorney_id in attorneys file,0
+Invalid attorney_id references in cases file,0
+Invalid case_id references in time_entries file,2
+Invalid attorney_id references in time_entries file,3
