@@ -2,6 +2,7 @@ import pandas as pd
 import logging
 import csv
 from datetime import datetime
+import yaml
 
 logging.basicConfig(
     filename='validation.log',
@@ -10,7 +11,7 @@ logging.basicConfig(
 )
 
 class DataValidator:
-    def __init__(self, attorneys_file, cases_file, time_entries_file):
+    def __init__(self, attorneys_file, cases_file, time_entries_file, schema_file="schema.yaml"):
         self.attorneys_file = attorneys_file
         self.cases_file = cases_file
         self.time_entries_file = time_entries_file
@@ -18,19 +19,22 @@ class DataValidator:
         self.cases_df = None
         self.time_entries_df = None
         self.error_details = []  # For collecting error messages
-        self.schema = {
-            "pro_bono_cases": {
-                "foreign_keys": {
-                    "attorney_id": "attorneys.attorney_id"
-                }
-            },
-            "time_entries": {
-                "foreign_keys": {
-                    "case_id": "pro_bono_cases.case_id",
-                    "attorney_id": "attorneys.attorney_id"
-                }
-            }
+
+        self.df_name_map = {
+            "attorneys": "attorneys_df",
+            "pro_bono_cases": "cases_df",
+            "time_entries": "time_entries_df"
         }
+
+        # Load schema from external YAML
+        try:
+            with open(schema_file, 'r') as f:
+                self.schema = yaml.safe_load(f)
+        except Exception as e:
+            msg = f"Failed to load schema file {schema_file}: {e}"
+            print(msg)
+            self.schema = {}
+            self.error_details.append(msg)
 
     def load_data(self):
         try:
@@ -94,7 +98,7 @@ class DataValidator:
         print("\n🔗 Verifying attorney_id in cases file exists in attorneys file...")
         case_fk = self.schema["pro_bono_cases"]["foreign_keys"]["attorney_id"]
         ref_df_name, ref_col = case_fk.split('.')
-        ref_df = getattr(self, f"{ref_df_name}_df")
+        ref_df = getattr(self, self.df_name_map[ref_df_name])
         invalid_attorney_ids_cases = set(self.cases_df['attorney_id']) - set(ref_df[ref_col])
         if invalid_attorney_ids_cases:
             msg = f"Foreign key mismatch: {len(invalid_attorney_ids_cases)} unknown attorney_id(s) found in cases file."
@@ -114,8 +118,8 @@ class DataValidator:
         te_case_fk = self.schema["time_entries"]["foreign_keys"]["case_id"]
         te_att_fk = self.schema["time_entries"]["foreign_keys"]["attorney_id"]
 
-        te_case_df = getattr(self, f"{te_case_fk.split('.')[0]}_df")
-        te_att_df = getattr(self, f"{te_att_fk.split('.')[0]}_df")
+        te_case_df = getattr(self, self.df_name_map[te_case_fk.split('.')[0]])
+        te_att_df = getattr(self, self.df_name_map[te_att_fk.split('.')[0]])
 
         invalid_case_ids = set(self.time_entries_df['case_id']) - set(te_case_df[te_case_fk.split('.')[1]])
         invalid_attorney_ids_time_entries = set(self.time_entries_df['attorney_id']) - set(te_att_df[te_att_fk.split('.')[1]])

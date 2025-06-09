@@ -1,3 +1,4 @@
+import pandas as pd
 import glob
 import tkinter as tk
 from tkinter import filedialog, messagebox
@@ -39,22 +40,58 @@ class DataValidationApp:
     def browse_attorneys(self):
         path = filedialog.askopenfilename(filetypes=[("CSV files", "*.csv")])
         if path:
-            self.attorneys_path.set(path)
+            expected_columns = set(self.get_schema_expected_columns("attorneys"))
+            if self.validate_csv_headers(path, expected_columns):
+                self.attorneys_path.set(path)
 
     def browse_cases(self):
         path = filedialog.askopenfilename(filetypes=[("CSV files", "*.csv")])
         if path:
-            self.cases_path.set(path)
+            expected_columns = set(self.get_schema_expected_columns("pro_bono_cases"))
+            if self.validate_csv_headers(path, expected_columns):
+                self.cases_path.set(path)
 
     def browse_entries(self):
         path = filedialog.askopenfilename(filetypes=[("CSV files", "*.csv")])
         if path:
-            self.entries_path.set(path)
+            expected_columns = set(self.get_schema_expected_columns("time_entries"))
+            if self.validate_csv_headers(path, expected_columns):
+                self.entries_path.set(path)
 
     def browse_schema(self):
-        path = filedialog.askopenfilename(filetypes=[("YAML files", "*.yaml;*.yml")])
+        path = filedialog.askopenfilename(filetypes=[("YAML files", "*.yaml"), ("YML files", "*.yml")])
         if path:
             self.schema_path.set(path)
+            print(f"Selected schema file: {path}")
+
+    def get_schema_expected_columns(self, file_key: str) -> list:
+        if not hasattr(self, 'schema'):
+            try:
+                import yaml
+                with open(self.schema_path.get() or "schema.yaml") as f:
+                    self.schema = yaml.safe_load(f)
+            except Exception:
+                self.schema = {}
+        return list(self.schema.get(file_key, {}).get("required_columns", {}).keys())
+
+    def validate_csv_headers(self, file_path: str, expected_columns: set) -> bool:
+        try:
+            df = pd.read_csv(file_path, nrows=0)  # Read only headers
+            file_columns = set(df.columns)
+            missing = expected_columns - file_columns
+            if missing:
+                messagebox.showwarning(
+                    "File Warning",
+                    f"Selected file '{file_path}' is missing expected columns:\n{', '.join(missing)}"
+                )
+                return False
+            return True
+        except Exception as e:
+            messagebox.showerror(
+                "File Error",
+                f"Could not read file '{file_path}': {e}"
+            )
+            return False
 
     def run_validation(self):
         try:
@@ -89,18 +126,6 @@ class DataValidationApp:
             summary += "\n\n===============================\n🧪 Detailed Validation Log\n===============================\n"
 
             self.output_text.delete(1.0, tk.END)
-
-            for line in summary.splitlines(keepends=True):
-                tag = None
-                if "✅" in line:
-                    tag = "success"
-                elif "❌" in line or "Invalid" in line or "Duplicate" in line:
-                    tag = "error"
-                elif "Nulls" in line and not line.endswith(",0\n") and not line.endswith(",0"):
-                    tag = "error"
-                elif "Nulls" in line and (line.endswith(",0\n") or line.endswith(",0")):
-                    tag = "success"
-                self.output_text.insert(tk.END, line, tag if tag else "")
 
             for line in error_details.splitlines(keepends=True):
                 tag = None
