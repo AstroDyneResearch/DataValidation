@@ -1,0 +1,35 @@
+attorneys:
+  required_columns:
+    attorney_id: int
+    first_name: str
+    last_name: str
+    email: str
+    department: str
+    bar_admission_date: date
+  format_validations:
+    email: email
+    bar_admission_date: date
+
+pro_bono_cases:
+  required_columns:
+    case_id: int
+    attorney_id: int
+    title: str
+    status: str
+    start_date: date
+    closed_date: date
+  enum:
+    status: [open, closed, pending]
+  foreign_keys:
+    attorney_id: attorneys.attorney_id
+
+time_entries:
+  required_columns:
+    entry_id: int
+    case_id: int
+    attorney_id: int
+    hours: float
+    date: date
+  foreign_keys:
+    case_id: pro_bono_cases.case_id
+    attorney_id: attorneys.attorney_id

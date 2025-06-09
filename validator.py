@@ -18,6 +18,19 @@ class DataValidator:
         self.cases_df = None
         self.time_entries_df = None
         self.error_details = []  # For collecting error messages
+        self.schema = {
+            "pro_bono_cases": {
+                "foreign_keys": {
+                    "attorney_id": "attorneys.attorney_id"
+                }
+            },
+            "time_entries": {
+                "foreign_keys": {
+                    "case_id": "pro_bono_cases.case_id",
+                    "attorney_id": "attorneys.attorney_id"
+                }
+            }
+        }
 
     def load_data(self):
         try:
@@ -79,7 +92,10 @@ class DataValidator:
 
         # Foreign key check
         print("\n🔗 Verifying attorney_id in cases file exists in attorneys file...")
-        invalid_attorney_ids_cases = set(self.cases_df['attorney_id']) - set(self.attorneys_df['attorney_id'])
+        case_fk = self.schema["pro_bono_cases"]["foreign_keys"]["attorney_id"]
+        ref_df_name, ref_col = case_fk.split('.')
+        ref_df = getattr(self, f"{ref_df_name}_df")
+        invalid_attorney_ids_cases = set(self.cases_df['attorney_id']) - set(ref_df[ref_col])
         if invalid_attorney_ids_cases:
             msg = f"Foreign key mismatch: {len(invalid_attorney_ids_cases)} unknown attorney_id(s) found in cases file."
             print(msg)
@@ -95,8 +111,14 @@ class DataValidator:
             self.error_details.append(msg)
 
         print("\n🔗 Verifying case_id and attorney_id in time_entries file exist in cases and attorneys files...")
-        invalid_case_ids = set(self.time_entries_df['case_id']) - set(self.cases_df['case_id'])
-        invalid_attorney_ids_time_entries = set(self.time_entries_df['attorney_id']) - set(self.attorneys_df['attorney_id'])
+        te_case_fk = self.schema["time_entries"]["foreign_keys"]["case_id"]
+        te_att_fk = self.schema["time_entries"]["foreign_keys"]["attorney_id"]
+
+        te_case_df = getattr(self, f"{te_case_fk.split('.')[0]}_df")
+        te_att_df = getattr(self, f"{te_att_fk.split('.')[0]}_df")
+
+        invalid_case_ids = set(self.time_entries_df['case_id']) - set(te_case_df[te_case_fk.split('.')[1]])
+        invalid_attorney_ids_time_entries = set(self.time_entries_df['attorney_id']) - set(te_att_df[te_att_fk.split('.')[1]])
         if invalid_case_ids:
             msg = f"Foreign key mismatch: {len(invalid_case_ids)} unknown case_id(s) found in time_entries file."
             print(msg)

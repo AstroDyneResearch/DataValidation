@@ -12,6 +12,7 @@ class DataValidationApp:
         self.attorneys_path = tk.StringVar()
         self.cases_path = tk.StringVar()
         self.entries_path = tk.StringVar()
+        self.schema_path = tk.StringVar()
 
         tk.Label(root, text="Attorneys CSV:").grid(row=0, column=0, sticky="e")
         tk.Entry(root, textvariable=self.attorneys_path, width=50).grid(row=0, column=1)
@@ -25,11 +26,15 @@ class DataValidationApp:
         tk.Entry(root, textvariable=self.entries_path, width=50).grid(row=2, column=1)
         tk.Button(root, text="Browse", command=self.browse_entries).grid(row=2, column=2)
 
-        tk.Button(root, text="Run Validation", command=self.run_validation).grid(row=3, column=1, pady=10)
+        tk.Label(root, text="Schema YAML:").grid(row=3, column=0, sticky="e")
+        tk.Entry(root, textvariable=self.schema_path, width=50).grid(row=3, column=1)
+        tk.Button(root, text="Browse", command=self.browse_schema).grid(row=3, column=2)
+
+        tk.Button(root, text="Run Validation", command=self.run_validation).grid(row=4, column=1, pady=10)
 
         # Add scrollable output text box at the bottom
         self.output_text = tk.Text(root, wrap="word", height=15, width=80)
-        self.output_text.grid(row=4, column=0, columnspan=3, padx=10, pady=10)
+        self.output_text.grid(row=5, column=0, columnspan=3, padx=10, pady=10)
 
     def browse_attorneys(self):
         path = filedialog.askopenfilename(filetypes=[("CSV files", "*.csv")])
@@ -46,12 +51,18 @@ class DataValidationApp:
         if path:
             self.entries_path.set(path)
 
+    def browse_schema(self):
+        path = filedialog.askopenfilename(filetypes=[("YAML files", "*.yaml;*.yml")])
+        if path:
+            self.schema_path.set(path)
+
     def run_validation(self):
         try:
             validator = DataValidator(
                 self.attorneys_path.get(),
                 self.cases_path.get(),
-                self.entries_path.get()
+                self.entries_path.get(),
+                schema_file=self.schema_path.get() if self.schema_path.get() else "schema.yaml"
             )
             validator.run_all()
             summary = f"""===============================
