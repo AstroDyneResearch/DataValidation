@@ -3,6 +3,112 @@ import logging
 import csv
 from datetime import datetime
 import yaml
+from math import isnan
+from pydantic import BaseModel, EmailStr, ValidationError
+try:
+    from pydantic import field_validator
+except ImportError:
+    # For Pydantic v1 fallback (should not happen for v2)
+    field_validator = None
+
+# CaseModel for validating pro_bono_cases rows
+from pydantic import field_validator
+
+class CaseModel(BaseModel):
+    case_id: int
+    attorney_id: int
+    title: str
+    status: str
+    start_date: str
+    closed_date: str
+
+    @field_validator("start_date", "closed_date", mode="before")
+    @classmethod
+    def validate_date_format(cls, v):
+        if v is None:
+            return v
+        if isinstance(v, float) and isnan(v):
+            return None
+        if not isinstance(v, str):
+            raise ValueError(f"Expected string for date field but got {type(v).__name__}")
+        if v == "":
+            return None
+        try:
+            datetime.strptime(v, "%Y-%m-%d")
+            return v
+        except ValueError:
+            raise ValueError("Invalid date format (expected YYYY-MM-DD)")
+
+    @field_validator("status")
+    @classmethod
+    def validate_status_enum(cls, v):
+        allowed = {"open", "closed", "pending"}
+        if v not in allowed:
+            raise ValueError(f"Invalid status '{v}', must be one of {allowed}")
+        return v
+
+
+class AttorneyModel(BaseModel):
+    attorney_id: int
+    first_name: str
+    last_name: str
+    email: EmailStr
+    department: str
+    bar_admission_date: str
+
+    @field_validator("bar_admission_date")
+    @classmethod
+    def validate_date_format(cls, v):
+        if v is None:
+            return v
+        if isinstance(v, float) and isnan(v):
+            return None
+        if not isinstance(v, str):
+            raise ValueError(f"Expected string for date field but got {type(v).__name__}")
+        if v == "":
+            return None
+        try:
+            datetime.strptime(v, "%Y-%m-%d")
+            return v
+        except ValueError:
+            raise ValueError("Invalid date format (expected YYYY-MM-DD)")
+
+# TimeEntryModel for validating time_entries rows
+class TimeEntryModel(BaseModel):
+    entry_id: int
+    case_id: int
+    attorney_id: int
+    hours: float
+    date: str
+
+    @field_validator("date")
+    @classmethod
+    def validate_date_format(cls, v):
+        if v is None:
+            return v
+        if isinstance(v, float) and isnan(v):
+            return None
+        if not isinstance(v, str):
+            raise ValueError(f"Expected string for date field but got {type(v).__name__}")
+        if v == "":
+            return None
+        try:
+            datetime.strptime(v, "%Y-%m-%d")
+            return v
+        except ValueError:
+            raise ValueError("Invalid date format (expected YYYY-MM-DD)")
+
+    @field_validator("hours")
+    @classmethod
+    def validate_hours(cls, v):
+        if isinstance(v, str):
+            try:
+                v = float(v)
+            except ValueError:
+                raise ValueError("hours must be a float")
+        if v < 0:
+            raise ValueError("hours cannot be negative")
+        return v
 
 logging.basicConfig(
     filename='validation.log',
@@ -166,6 +272,15 @@ class DataValidator:
                 print(msg)
                 self.error_details.append(msg)
 
+        # Row-level Pydantic validation for attorneys_df
+        for i, row in self.attorneys_df.iterrows():
+            try:
+                AttorneyModel(**row.to_dict())
+            except ValidationError as e:
+                self.error_details.append(f"❌ Row {i+2} failed Pydantic validation:")
+                for err in e.errors():
+                    self.error_details.append(f"   - {err['loc'][0]}: {err['msg']}")
+
         # Date format check for bar_admission_date in attorneys_df
         if 'bar_admission_date' in self.attorneys_df.columns:
             parsed_dates = pd.to_datetime(self.attorneys_df['bar_admission_date'], errors='coerce')
@@ -215,6 +330,24 @@ class DataValidator:
                 print(msg)
                 self.error_details.append(msg)
 
+        # Pydantic row-level validation for cases_df
+        for i, row in self.cases_df.iterrows():
+            try:
+                CaseModel(**row.to_dict())
+            except ValidationError as e:
+                self.error_details.append(f"❌ Row {i+2} in cases file failed Pydantic validation:")
+                for err in e.errors():
+                    self.error_details.append(f"   - {err['loc'][0]}: {err['msg']}")
+
+        # Pydantic row-level validation for time_entries_df
+        for i, row in self.time_entries_df.iterrows():
+            try:
+                TimeEntryModel(**row.to_dict())
+            except ValidationError as e:
+                self.error_details.append(f"❌ Row {i+2} in time_entries file failed Pydantic validation:")
+                for err in e.errors():
+                    self.error_details.append(f"   - {err['loc'][0]}: {err['msg']}")
+
     def export_validation_report(self):
         report_file = f"validation_report_{datetime.now().strftime('%Y%m%d_%H%M%S')}.csv"
         with open(report_file, mode='w', newline='') as file:
@@ -241,7 +374,32 @@ class DataValidator:
             writer.writerow(["Invalid case_id references in time_entries file", len(invalid_case_ids_time_entries)])
             writer.writerow(["Invalid attorney_id references in time_entries file", len(invalid_attorney_ids_time_entries)])
 
+            # Add detailed error rows
+            writer.writerow([])
+            writer.writerow(["Detailed Errors"])
+            for error in self.error_details:
+                writer.writerow([error])
+
         logging.info(f"Validation report exported to {report_file}")
+
+        # Write JSON report
+        import json
+        json_report_file = f"validation_report_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
+        json_data = {
+            "summary": {
+                "Nulls in attorneys file": int(attorney_nulls),
+                "Nulls in cases file": int(case_nulls),
+                "Nulls in time_entries file": int(time_entries_nulls),
+                "Duplicate attorney_id in attorneys file": int(attorney_duplicates),
+                "Invalid attorney_id references in cases file": int(len(invalid_attorney_ids_cases)),
+                "Invalid case_id references in time_entries file": int(len(invalid_case_ids_time_entries)),
+                "Invalid attorney_id references in time_entries file": int(len(invalid_attorney_ids_time_entries))
+            },
+            "details": self.error_details
+        }
+        with open(json_report_file, 'w') as jf:
+            json.dump(json_data, jf, indent=2)
+        logging.info(f"Validation JSON report exported to {json_report_file}")
 
     def get_error_details(self):
         if not self.error_details:

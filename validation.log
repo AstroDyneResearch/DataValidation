@@ -52,3 +52,8 @@
 2025-06-09 14:49:52,297 - INFO - Files loaded successfully.
 2025-06-09 14:51:12,189 - INFO - Files loaded successfully.
 2025-06-09 14:51:12,193 - INFO - Validation report exported to validation_report_20250609_145112.csv
+2025-06-09 17:17:00,674 - INFO - Files loaded successfully.
+2025-06-09 17:17:00,679 - INFO - Validation report exported to validation_report_20250609_171700.csv
+2025-06-09 17:21:19,690 - INFO - Files loaded successfully.
+2025-06-09 17:21:19,693 - INFO - Validation report exported to validation_report_20250609_172119.csv
+2025-06-09 17:21:19,693 - INFO - Validation JSON report exported to validation_report_20250609_172119.json

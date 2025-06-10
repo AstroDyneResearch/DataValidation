@@ -124,10 +124,11 @@ class DataValidationApp:
 
             error_details = validator.get_error_details()
             summary += "\n\n===============================\n🧪 Detailed Validation Log\n===============================\n"
+            summary += error_details
 
             self.output_text.delete(1.0, tk.END)
 
-            for line in error_details.splitlines(keepends=True):
+            for line in summary.splitlines(keepends=True):
                 tag = None
                 if "✅" in line:
                     tag = "success"
