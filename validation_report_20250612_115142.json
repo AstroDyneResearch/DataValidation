@@ -1,0 +1,24 @@
+{
+  "summary": {
+    "Nulls in attorneys file": 2,
+    "Nulls in cases file": 72,
+    "Nulls in time_entries file": 0,
+    "Duplicate attorney_id in attorneys file": 0,
+    "Invalid attorney_id references in cases file": 0,
+    "Invalid case_id references in time_entries file": 2,
+    "Invalid attorney_id references in time_entries file": 3
+  },
+  "details": [
+    "All expected columns are present.",
+    "No duplicate attorney_id values.",
+    "All attorney_id values in cases file match attorneys file.",
+    "Foreign key mismatch: 2 unknown case_id(s) found in time_entries file.",
+    "\u274c Unknown case_id in time_entries file at row 19: value = 1109",
+    "\u274c Unknown case_id in time_entries file at row 50: value = 1182",
+    "Foreign key mismatch: 3 unknown attorney_id(s) found in time_entries file.",
+    "\u274c Unknown attorney_id in time_entries file at row 7: value = 108",
+    "\u274c Unknown attorney_id in time_entries file at row 25: value = 106",
+    "\u274c Unknown attorney_id in time_entries file at row 38: value = 116",
+    "\u274c Unknown attorney_id in time_entries file at row 40: value = 108"
+  ]
+}

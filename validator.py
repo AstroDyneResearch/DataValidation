@@ -12,9 +12,24 @@ except ImportError:
     field_validator = None
 
 # CaseModel for validating pro_bono_cases rows
-from pydantic import field_validator
 
-class CaseModel(BaseModel):
+# --- Begin updated validation models ---
+
+class BaseValidatorModel(BaseModel):
+    @staticmethod
+    def parse_date_field(v, field_name="date"):
+        if v is None or v == "":
+            return None
+        if not isinstance(v, str):
+            raise ValueError(f"Expected string for {field_name} but got {type(v).__name__}")
+        try:
+            datetime.strptime(v, "%Y-%m-%d")
+            return v
+        except ValueError:
+            raise ValueError(f"Invalid {field_name} format (expected YYYY-MM-DD)")
+
+
+class CaseModel(BaseValidatorModel):
     case_id: int
     attorney_id: int
     title: str
@@ -22,22 +37,10 @@ class CaseModel(BaseModel):
     start_date: str
     closed_date: str
 
-    @field_validator("start_date", "closed_date", mode="before")
+    @field_validator("start_date", "closed_date", mode="after")
     @classmethod
-    def validate_date_format(cls, v):
-        if v is None:
-            return v
-        if isinstance(v, float) and isnan(v):
-            return None
-        if not isinstance(v, str):
-            raise ValueError(f"Expected string for date field but got {type(v).__name__}")
-        if v == "":
-            return None
-        try:
-            datetime.strptime(v, "%Y-%m-%d")
-            return v
-        except ValueError:
-            raise ValueError("Invalid date format (expected YYYY-MM-DD)")
+    def validate_date_format(cls, v, info):
+        return cls.parse_date_field(v, field_name=info.field_name)
 
     @field_validator("status")
     @classmethod
@@ -48,7 +51,7 @@ class CaseModel(BaseModel):
         return v
 
 
-class AttorneyModel(BaseModel):
+class AttorneyModel(BaseValidatorModel):
     attorney_id: int
     first_name: str
     last_name: str
@@ -56,47 +59,23 @@ class AttorneyModel(BaseModel):
     department: str
     bar_admission_date: str
 
-    @field_validator("bar_admission_date")
+    @field_validator("bar_admission_date", mode="after")
     @classmethod
-    def validate_date_format(cls, v):
-        if v is None:
-            return v
-        if isinstance(v, float) and isnan(v):
-            return None
-        if not isinstance(v, str):
-            raise ValueError(f"Expected string for date field but got {type(v).__name__}")
-        if v == "":
-            return None
-        try:
-            datetime.strptime(v, "%Y-%m-%d")
-            return v
-        except ValueError:
-            raise ValueError("Invalid date format (expected YYYY-MM-DD)")
+    def validate_date_format(cls, v, info):
+        return cls.parse_date_field(v, field_name=info.field_name)
 
-# TimeEntryModel for validating time_entries rows
-class TimeEntryModel(BaseModel):
+
+class TimeEntryModel(BaseValidatorModel):
     entry_id: int
     case_id: int
     attorney_id: int
     hours: float
     date: str
 
-    @field_validator("date")
+    @field_validator("date", mode="after")
     @classmethod
-    def validate_date_format(cls, v):
-        if v is None:
-            return v
-        if isinstance(v, float) and isnan(v):
-            return None
-        if not isinstance(v, str):
-            raise ValueError(f"Expected string for date field but got {type(v).__name__}")
-        if v == "":
-            return None
-        try:
-            datetime.strptime(v, "%Y-%m-%d")
-            return v
-        except ValueError:
-            raise ValueError("Invalid date format (expected YYYY-MM-DD)")
+    def validate_date_format(cls, v, info):
+        return cls.parse_date_field(v, field_name=info.field_name)
 
     @field_validator("hours")
     @classmethod
@@ -109,6 +88,8 @@ class TimeEntryModel(BaseModel):
         if v < 0:
             raise ValueError("hours cannot be negative")
         return v
+
+# --- End updated validation models ---
 
 logging.basicConfig(
     filename='validation.log',
